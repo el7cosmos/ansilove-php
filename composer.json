@@ -1,0 +1,15 @@
+{
+    "name": "el7cosmos/ansilove",
+    "description": "ANSI and ASCII art to PNG converter in PHP",
+    "type": "php-ext",
+    "license": "PHP-3.01",
+    "authors": [
+        {
+            "name": "Abi أب",
+            "email": "el@elabee.me"
+        }
+    ],
+    "php-ext": {
+        "extension-name": "ansilove"
+    }
+}

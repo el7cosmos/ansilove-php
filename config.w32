@@ -1,0 +1,7 @@
+ARG_ENABLE('ansilove', 'ansilove support', 'no');
+
+if (PHP_ANSILOVE != 'no') {
+	AC_DEFINE('HAVE_ANSILOVE', 1, "Define to 1 if the PHP extension 'ansilove' is available.");
+
+	EXTENSION('ansilove', 'ansilove.c', null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
+}
