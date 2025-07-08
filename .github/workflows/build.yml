@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
   build:
     strategy:
@@ -19,28 +16,37 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - run: "brew info libansilove $(brew deps libansilove) --json | jq '[.[] | {name, version: .versions.stable}]' > Brewfile.lock.json"
         if: ${{ matrix.os == 'macos-latest' }}
-      - run: phpize
-      - run: ./configure
-      - run: make
-      - run: make test
+        env:
+          HOMEBREW_NO_ENV_HINTS: 1
+      - uses: actions/cache@v4
+        if: ${{ matrix.os == 'macos-latest' }}
+        with:
+          path: ~/Library/Caches/Homebrew
+          key: ${{ runner.os }}-homebrew-${{ hashFiles('Brewfile.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-homebrew-${{ hashFiles('Brewfile.lock.json') }}
+            ${{ runner.os }}-homebrew-
+      - run: brew install libansilove
+        if: ${{ matrix.os == 'macos-latest' }}
+      - run: |
+          sudo apt update
+          sudo apt install libansilove-dev
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+      - uses: shivammathur/setup-php@v2
+        with:
+          tools: pie
+      - name: Build
+        run: |
+          phpize
+          ./configure
+          make
+      - name: Test
+        run: make test
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
           path: php_test_results_*.txt
-
-  install:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
-        with:
-          tools: pie
       - run: pie install --ansi
       - run: php --re ansilove
