@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
+        php-version: [ '8.1', '8.2', '8.3', '8.4' ]
 
     runs-on: ${{ matrix.os }}
 
@@ -36,6 +37,7 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
       - uses: shivammathur/setup-php@v2
         with:
+          php-version: ${{ matrix.php-version }}
           tools: pie
       - name: Build
         run: |

@@ -2,6 +2,7 @@
 # include <config.h>
 #endif
 
+#include "Zend/zend_API.h"
 #include "Zend/zend_enum.h"
 
 #include "enum.h"
