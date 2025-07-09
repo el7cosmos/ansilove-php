@@ -68,26 +68,6 @@ static zval *read_property(zend_object *obj, const char *name, zval *rv)
 #define RETURN_LONG_PROP(name) RETURN_LONG(Z_LVAL_P(read_property(Z_OBJ_P(getThis()), #name, return_value)))
 #define RETURN_OBJ_PROP(name) RETURN_OBJ(Z_OBJ_P(read_property(Z_OBJ_P(getThis()), #name, return_value)))
 
-PHP_METHOD(AnsiLove, __construct)
-{
-    char *input;
-    size_t input_len;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "p", &input, &input_len) == FAILURE) return;
-
-    zend_object *obj = Z_OBJ_P(getThis());
-    ansilove_object *intern = ansilove_from_obj(obj);
-    zend_update_property_stringl(obj->ce, obj, "input", strlen("input"), input, input_len);
-
-    /* Load the input file */
-    if (ansilove_loadfile(&intern->ctx, input) != 0)
-    {
-        zend_throw_exception(ansilove_exception_ce, ansilove_error(&intern->ctx), intern->ctx.error);
-        ansilove_clean(&intern->ctx);
-        RETURN_THROWS();
-    }
-}
-
 PHP_METHOD(AnsiLove, isDiz) { RETURN_BOOL(ansilove_from_obj(Z_OBJ_P(getThis()))->options.diz); }
 PHP_METHOD(AnsiLove, setDiz)
 {
@@ -172,4 +152,66 @@ PHP_METHOD(AnsiLove, setScaleFactor)
     const zend_long value = setter_long(execute_data, obj, "scaleFactor");
     if (value != 0) intern->options.scale_factor = value;
     RETURN_OBJ_COPY(obj);
+}
+
+PHP_METHOD(AnsiLove, convert)
+{
+    char *input, *output;
+    size_t input_len, output_len;
+    zval *type;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "ppz", &input, &input_len, &output, &output_len, &type) == FAILURE)
+    {
+        return;
+    }
+
+    zend_object *obj = Z_OBJ_P(getThis());
+    ansilove_object *intern = ansilove_from_obj(obj);
+
+    /* Load the input file */
+    if (ansilove_loadfile(&intern->ctx, input) != 0)
+    {
+        zend_throw_exception(ansilove_exception_ce, ansilove_error(&intern->ctx), intern->ctx.error);
+        RETURN_THROWS();
+    }
+
+    int (*converter_func)(struct ansilove_ctx *, struct ansilove_options *) = ansilove_ansi;
+    const char *type_string = zval_get_string(zend_enum_fetch_case_name(Z_OBJ_P(type)))->val;
+
+    if (strcmp(type_string, "Ansi") == 0)
+    {
+        converter_func = ansilove_ansi;
+    }
+    else if (strcmp(type_string, "Artworx") == 0)
+    {
+        converter_func = ansilove_artworx;
+    }
+    else if (strcmp(type_string, "Binary") == 0)
+    {
+        converter_func = ansilove_binary;
+    }
+    else if (strcmp(type_string, "PCBoard") == 0)
+    {
+        converter_func = ansilove_pcboard;
+    }
+    else if (strcmp(type_string, "TundraDraw") == 0)
+    {
+        converter_func = ansilove_tundra;
+    }
+    else if (strcmp(type_string, "XBin") == 0)
+    {
+        converter_func = ansilove_xbin;
+    }
+
+    if (converter_func(&intern->ctx, &intern->options) != 0)
+    {
+        zend_throw_exception(ansilove_exception_ce, ansilove_error(&intern->ctx), intern->ctx.error);
+        RETURN_THROWS();
+    }
+
+    if (ansilove_savefile(&intern->ctx, output) != 0)
+    {
+        zend_throw_exception(ansilove_exception_ce, ansilove_error(&intern->ctx), intern->ctx.error);
+        RETURN_THROWS();
+    }
 }

@@ -31,6 +31,7 @@ PHP_MINIT_FUNCTION(ansilove)
 {
     register_enum_font();
     register_enum_mode();
+    register_class_AnsiLoveType();
     ansilove_ce = register_class_AnsiLove();
     ansilove_exception_ce = register_class_AnsiLoveException(zend_ce_exception);
 

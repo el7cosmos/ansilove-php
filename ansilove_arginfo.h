@@ -1,9 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 0e28ee80fa58ef9d4cd1a4b8231f6c22d3138a05 */
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_AnsiLove___construct, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, input, IS_STRING, 0)
-ZEND_END_ARG_INFO()
+ * Stub hash: 6120c8fc180670fed920acb8414f26077dfd8624 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_AnsiLove_isDiz, 0, 0, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
@@ -63,8 +59,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_AnsiLove_setScaleFactor, 0,
 	ZEND_ARG_TYPE_INFO(0, scaleFactor, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_AnsiLove_convert, 0, 3, IS_VOID, 0)
+	ZEND_ARG_TYPE_INFO(0, input, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO(0, output, IS_STRING, 0)
+	ZEND_ARG_OBJ_INFO(0, type, AnsiLoveType, 0)
+ZEND_END_ARG_INFO()
 
-ZEND_METHOD(AnsiLove, __construct);
 ZEND_METHOD(AnsiLove, isDiz);
 ZEND_METHOD(AnsiLove, setDiz);
 ZEND_METHOD(AnsiLove, isDos);
@@ -83,20 +83,9 @@ ZEND_METHOD(AnsiLove, getMode);
 ZEND_METHOD(AnsiLove, setMode);
 ZEND_METHOD(AnsiLove, getScaleFactor);
 ZEND_METHOD(AnsiLove, setScaleFactor);
-
-
-static const zend_function_entry class_AnsiLoveFont_methods[] = {
-	ZEND_FE_END
-};
-
-
-static const zend_function_entry class_AnsiLoveMode_methods[] = {
-	ZEND_FE_END
-};
-
+ZEND_METHOD(AnsiLove, convert);
 
 static const zend_function_entry class_AnsiLove_methods[] = {
-	ZEND_ME(AnsiLove, __construct, arginfo_class_AnsiLove___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(AnsiLove, isDiz, arginfo_class_AnsiLove_isDiz, ZEND_ACC_PUBLIC)
 	ZEND_ME(AnsiLove, setDiz, arginfo_class_AnsiLove_setDiz, ZEND_ACC_PUBLIC)
 	ZEND_ME(AnsiLove, isDos, arginfo_class_AnsiLove_isDos, ZEND_ACC_PUBLIC)
@@ -115,17 +104,13 @@ static const zend_function_entry class_AnsiLove_methods[] = {
 	ZEND_ME(AnsiLove, setMode, arginfo_class_AnsiLove_setMode, ZEND_ACC_PUBLIC)
 	ZEND_ME(AnsiLove, getScaleFactor, arginfo_class_AnsiLove_getScaleFactor, ZEND_ACC_PUBLIC)
 	ZEND_ME(AnsiLove, setScaleFactor, arginfo_class_AnsiLove_setScaleFactor, ZEND_ACC_PUBLIC)
-	ZEND_FE_END
-};
-
-
-static const zend_function_entry class_AnsiLoveException_methods[] = {
+	ZEND_ME(AnsiLove, convert, arginfo_class_AnsiLove_convert, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
 static zend_class_entry *register_class_AnsiLoveFont(void)
 {
-	zend_class_entry *class_entry = zend_register_internal_enum("AnsiLoveFont", IS_LONG, class_AnsiLoveFont_methods);
+	zend_class_entry *class_entry = zend_register_internal_enum("AnsiLoveFont", IS_LONG, NULL);
 
 	zval enum_case_CP437_value;
 	ZVAL_LONG(&enum_case_CP437_value, 1);
@@ -232,7 +217,7 @@ static zend_class_entry *register_class_AnsiLoveFont(void)
 
 static zend_class_entry *register_class_AnsiLoveMode(void)
 {
-	zend_class_entry *class_entry = zend_register_internal_enum("AnsiLoveMode", IS_LONG, class_AnsiLoveMode_methods);
+	zend_class_entry *class_entry = zend_register_internal_enum("AnsiLoveMode", IS_LONG, NULL);
 
 	zval enum_case_Ced_value;
 	ZVAL_LONG(&enum_case_Ced_value, 1);
@@ -249,13 +234,36 @@ static zend_class_entry *register_class_AnsiLoveMode(void)
 	return class_entry;
 }
 
+static zend_class_entry *register_class_AnsiLoveType(void)
+{
+	zend_class_entry *class_entry = zend_register_internal_enum("AnsiLoveType", IS_UNDEF, NULL);
+
+	zend_enum_add_case_cstr(class_entry, "Ansi", NULL);
+
+	zend_enum_add_case_cstr(class_entry, "Artworx", NULL);
+
+	zend_enum_add_case_cstr(class_entry, "Binary", NULL);
+
+	zend_enum_add_case_cstr(class_entry, "PCBoard", NULL);
+
+	zend_enum_add_case_cstr(class_entry, "TundraDraw", NULL);
+
+	zend_enum_add_case_cstr(class_entry, "XBin", NULL);
+
+	return class_entry;
+}
+
 static zend_class_entry *register_class_AnsiLove(void)
 {
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "AnsiLove", class_AnsiLove_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_NO_DYNAMIC_PROPERTIES);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
 	class_entry->ce_flags |= ZEND_ACC_NO_DYNAMIC_PROPERTIES;
+#endif
 
 	zval property_input_default_value;
 	ZVAL_UNDEF(&property_input_default_value);
@@ -293,10 +301,10 @@ static zend_class_entry *register_class_AnsiLove(void)
 	zend_declare_typed_property(class_entry, property_columns_name, &property_columns_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_columns_name);
 
-	zend_string *property_font_class_AnsiLoveFont = zend_string_init("AnsiLoveFont", sizeof("AnsiLoveFont")-1, 1);
 	zval property_font_default_value;
 	ZVAL_UNDEF(&property_font_default_value);
 	zend_string *property_font_name = zend_string_init("font", sizeof("font") - 1, 1);
+	zend_string *property_font_class_AnsiLoveFont = zend_string_init("AnsiLoveFont", sizeof("AnsiLoveFont")-1, 1);
 	zend_declare_typed_property(class_entry, property_font_name, &property_font_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_font_class_AnsiLoveFont, 0, 0));
 	zend_string_release(property_font_name);
 
@@ -306,10 +314,10 @@ static zend_class_entry *register_class_AnsiLove(void)
 	zend_declare_typed_property(class_entry, property_bits_name, &property_bits_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_bits_name);
 
-	zend_string *property_mode_class_AnsiLoveMode = zend_string_init("AnsiLoveMode", sizeof("AnsiLoveMode")-1, 1);
 	zval property_mode_default_value;
 	ZVAL_UNDEF(&property_mode_default_value);
 	zend_string *property_mode_name = zend_string_init("mode", sizeof("mode") - 1, 1);
+	zend_string *property_mode_class_AnsiLoveMode = zend_string_init("AnsiLoveMode", sizeof("AnsiLoveMode")-1, 1);
 	zend_declare_typed_property(class_entry, property_mode_name, &property_mode_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_mode_class_AnsiLoveMode, 0, 0));
 	zend_string_release(property_mode_name);
 
@@ -326,8 +334,12 @@ static zend_class_entry *register_class_AnsiLoveException(zend_class_entry *clas
 {
 	zend_class_entry ce, *class_entry;
 
-	INIT_CLASS_ENTRY(ce, "AnsiLoveException", class_AnsiLoveException_methods);
+	INIT_CLASS_ENTRY(ce, "AnsiLoveException", NULL);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, class_entry_Exception, 0);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, class_entry_Exception);
+#endif
 
 	return class_entry;
 }

@@ -60,6 +60,16 @@ enum AnsiLoveMode: int
     case Workbench = 3;
 }
 
+enum AnsiLoveType
+{
+    case Ansi;
+    case Artworx;
+    case Binary;
+    case PCBoard;
+    case TundraDraw;
+    case XBin;
+}
+
 /**
  * @strict-properties
  */
@@ -76,7 +86,6 @@ class AnsiLove
     private AnsiLoveMode $mode;
     private int $scaleFactor;
 
-    public function __construct(string $input) {}
     public function isDiz(): bool {}
     public function setDiz(bool $diz = TRUE): AnsiLove {}
     public function isDos(): bool {}
@@ -95,6 +104,8 @@ class AnsiLove
     public function setMode(AnsiLoveMode $mode): AnsiLove {}
     public function getScaleFactor(): int {}
     public function setScaleFactor(int $scaleFactor): AnsiLove {}
+
+    public function convert(string $input, string $output, AnsiLoveType $type): void {}
 }
 
 class AnsiLoveException extends Exception
